@@ -3,7 +3,8 @@ window.bookmeat = false;
 
 init();
 
-function init() {
+function init()
+{
 	if (!validate()) {
 		return;
 	}
@@ -15,7 +16,8 @@ function init() {
 	}
 }
 
-function validate() {
+function validate()
+{
 	if ("迅雷网络订饭系统" != document.title) {
 		alert("请先进入订饭系统！");
 		return false;
@@ -34,7 +36,8 @@ function validate() {
 	return true;
 }
 
-function alter(doc) {
+function alter(doc)
+{
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
 	account.value = Math.floor(Math.random()*100000);
@@ -43,7 +46,8 @@ function alter(doc) {
 	return true;
 }
 
-function GetBrowser() {
+function GetBrowser()
+{
 	var browser = new Array();
 	var ua = navigator.userAgent.toLowerCase();
 	var s;
@@ -54,13 +58,16 @@ function GetBrowser() {
 	return browser;
 }
 
-function FullBrowserSupport(doc, browser) {
+function FullBrowserSupport(doc, browser)
+{
 	if (null != browser.firefox) {
 		var tds = doc.getElementsByTagName("td");
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
-			td.addEventListener("click", OnTdClick, false);
+			td.onclick = OnTdClick;
+			//td.addEventListener("click", OnTdClick, false);
 		}
+		alert("火狐已经支持鼠标点击，谢谢。");
 	}
 }
 
@@ -73,4 +80,8 @@ function OnTdClick(e)
 	var form1 = doc.getElementsByName("form1")[0];
 	form1.restaurant.value = strName;
 	form1.food.value = td.innerHTML;
+}
+
+function OnSubmit(e)
+{
 }
