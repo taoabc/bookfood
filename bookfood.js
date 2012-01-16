@@ -8,6 +8,8 @@ function init() {
 		return;
 	}
 	var doc = document.getElementsByName("mainfra")[0].contentDocument;
+	var browser = GetBrowser();
+	FullBrowserSupport(doc, browser);
 	if (!alter(doc)) {
 		return;
 	}
@@ -19,14 +21,14 @@ function validate() {
 		return false;
 	}
 	var e = document.getElementsByName("mainfra")[0];
-	if (null == e || "undefined" == typeof (e)) {
-		alert("脚本失效，请提交BUG，待作者升级。");
+	if (null == e || undefined == e) {
+		alert("尼玛订饭系统更改了，该脚本暂时失效，速度联系我。");
 		return false;
 	}
 	var doc = e.contentDocument;
 	var employee = doc.getElementById("employee");
-	if (null == employee || "undefined" == typeof (employee)) {
-		alert("请点选  ‘我要订饭’");
+	if (null == employee || undefined == employee) {
+		alert("请先点选  ‘我要订饭’");
 		return false;
 	}
 	return true;
@@ -37,6 +39,38 @@ function alter(doc) {
 	var account = doc.getElementById("account");
 	account.value = Math.floor(Math.random()*100000);
 	employee.readOnly = false;
-	alert("现在可以试一下订饭了哟，亲~");
+	alert("开始点吧！");
 	return true;
+}
+
+function GetBrowser() {
+	var browser = new Array();
+	var ua = navigator.userAgent.toLowerCase();
+	var s;
+	(s = ua.match(/firefox\/[\d.]+/g)) ? browser.firefox = s[0].substr(8) : null;
+	(s = ua.match(/msie\s[\d.]+/g)) ? browser.ie = s[0].substr(5) : null;
+	(s = ua.match(/chrome\/[\d.]+/g)) ? browser.chrome = s[0].substr(7) : null;
+
+	return browser;
+}
+
+function FullBrowserSupport(doc, browser) {
+	if (null != browser.firefox) {
+		var tds = doc.getElementsByTagName("td");
+		for (var i = 0; i < tds.length; ++i) {
+			td = tds[i];
+			td.addEventListener("click", OnTdClick, false);
+		}
+	}
+}
+
+function OnTdClick(e)
+{
+	var td = e.target;
+	var tbl = td.parentElement.parentElement.parentElement.parentElement;
+	var strName = tbl.getElementsByClassName("eateryname")[0].innerHTML;
+	var doc = document.getElementsByName("mainfra")[0].contentDocument;
+	var form1 = doc.getElementsByName("form1")[0];
+	form1.restaurant.value = strName;
+	form1.food.value = td.innerHTML;
 }
