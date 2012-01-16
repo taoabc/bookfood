@@ -18,9 +18,14 @@ function validate() {
 		alert("请先进入订饭系统！");
 		return false;
 	}
-	var doc = document.getElementsByName("mainfra")[0].contentDocument;
+	var e = document.getElementsByName("mainfra")[0];
+	if (null == e || "undefined" == typeof (e)) {
+		alert("脚本失效，请提交BUG，待作者升级。");
+		return false;
+	}
+	var doc = e.contentDocument;
 	var employee = doc.getElementById("employee");
-	if ("undefined" == typeof (employee)) {
+	if (null == employee || "undefined" == typeof (employee)) {
 		alert("请点选  ‘我要订饭’");
 		return false;
 	}
