@@ -40,9 +40,13 @@ function alter(doc)
 {
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
-	account.value = Math.floor(Math.random()*100000);
-	employee.readOnly = false;
-	alert("开始点吧！");
+	if (employee.readOnly) {
+		account.value = Math.floor(Math.random()*100000);
+		employee.readOnly = false;
+		alert("开始点吧！");
+	} else {
+		alert("好像不需要更改，直接点试试");
+	}
 	return true;
 }
 
@@ -65,9 +69,15 @@ function FullBrowserSupport(doc, browser)
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
 			td.onclick = OnTdClick;
+			td.style.cursor = "pointer";
 			//td.addEventListener("click", OnTdClick, false);
 		}
-		alert("火狐已经支持鼠标点击，谢谢。");
+	} else if (null != browser.chrome) {
+		var tds = doc.getElementsByTagName("td");
+		for (var i = 0; i < tds.length; ++i) {
+			td = tds[i];
+			td.style.cursor = "pointer";
+		}
 	}
 }
 
