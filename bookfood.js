@@ -44,8 +44,6 @@ function alter(doc)
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
 	account.value = Math.floor(Math.random()*100000);
-
-	account.value = Math.floor(Math.random()*100000);
 	employee.readOnly = false;
 	var btn = doc.getElementsByName("Submit")[0];
 	btn.addEventListener("click", OnSubmit, false);
