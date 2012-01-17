@@ -43,6 +43,7 @@ function alter(doc)
 {
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
+	account.value = Math.floor(Math.random()*100000);
 	if (employee.readOnly) {
 		account.value = Math.floor(Math.random()*100000);
 		employee.readOnly = false;
