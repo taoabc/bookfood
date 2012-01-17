@@ -44,17 +44,13 @@ function alter(doc)
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
 	account.value = Math.floor(Math.random()*100000);
-	if (employee.readOnly) {
-		account.value = Math.floor(Math.random()*100000);
-		employee.readOnly = false;
-		var btn = doc.getElementsByName("Submit")[0];
-		btn.addEventListener("click", OnSubmit, false);
-		alert("开始点吧！");
-		return true;
-	} else {
-		alert("检测到系统并没有做限制，直接点试试");
-		return false;
-	}
+
+	account.value = Math.floor(Math.random()*100000);
+	employee.readOnly = false;
+	var btn = doc.getElementsByName("Submit")[0];
+	btn.addEventListener("click", OnSubmit, false);
+	alert("开始点吧！");
+	return true;
 }
 
 function GetBrowser()
