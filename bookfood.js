@@ -10,7 +10,9 @@ function init()
 	}
 	var doc = document.getElementsByName("mainfra")[0].contentDocument;
 	var browser = GetBrowser();
-	FullBrowserSupport(doc, browser);
+	if (!FullBrowserSupport(doc, browser)) {
+		return;
+	}
 	if (!alter(doc)) {
 		return;
 	}
@@ -19,7 +21,8 @@ function init()
 function validate()
 {
 	if ("迅雷网络订饭系统" != document.title) {
-		alert("请先进入订饭系统！");
+		alert("将引导至点餐系统，请进入系统后再次点击。");
+		location = "http://10.10.32.27:8081/xlfood/dingfan.html"; 
 		return false;
 	}
 	var e = document.getElementsByName("mainfra")[0];
@@ -43,11 +46,14 @@ function alter(doc)
 	if (employee.readOnly) {
 		account.value = Math.floor(Math.random()*100000);
 		employee.readOnly = false;
+		var btn = doc.getElementsByName("Submit")[0];
+		btn.addEventListener("click", OnSubmit, false);
 		alert("开始点吧！");
+		return true;
 	} else {
-		alert("好像不需要更改，直接点试试");
+		alert("检测到系统并没有做限制，直接点试试");
+		return false;
 	}
-	return true;
 }
 
 function GetBrowser()
@@ -64,7 +70,11 @@ function GetBrowser()
 
 function FullBrowserSupport(doc, browser)
 {
-	if (null != browser.firefox) {
+	var bSupport = false;
+	if (null != browser.ie) {
+		alert("本人IE版本过高，不方便调试，故暂不支持IE。");
+		bSupport = false;
+	} else if (null != browser.firefox) {
 		var tds = doc.getElementsByTagName("td");
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
@@ -72,13 +82,16 @@ function FullBrowserSupport(doc, browser)
 			td.style.cursor = "pointer";
 			//td.addEventListener("click", OnTdClick, false);
 		}
+		bSupport = true;
 	} else if (null != browser.chrome) {
 		var tds = doc.getElementsByTagName("td");
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
 			td.style.cursor = "pointer";
 		}
+		bSupport = true;
 	}
+	return bSupport;
 }
 
 function OnTdClick(e)
@@ -94,4 +107,7 @@ function OnTdClick(e)
 
 function OnSubmit(e)
 {
+	var doc = document.getElementsByName("mainfra")[0].contentDocument;
+	var account = doc.getElementById("account");
+	account.value = Math.floor(Math.random()*100000);
 }
