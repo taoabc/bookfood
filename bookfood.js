@@ -49,11 +49,13 @@ function alter(doc)
 	var account = doc.getElementById("account");
 	var area = GetArea();
 	if ("xlfood" == area) {
-		alert("软件园的订餐正在紧张增加中");
+		ShowAccountInputLine(doc);
 		return false;
+	} else if ("dazu" == area) {
+		account.value = Math.floor(Math.random()*100000);
 	}
-	account.value = Math.floor(Math.random()*100000);
 	employee.readOnly = false;
+	//add submit handler
 	var btn = doc.getElementsByName("Submit")[0];
 	btn.addEventListener("click", OnSubmit, false);
 	alert("开始点吧！");
@@ -63,7 +65,7 @@ function alter(doc)
 function GetBrowser()
 {
 	var browser = new Array();
-	var ua = navigator.userAgent.toLowerCase();
+	var ua = navigator.userAgent;
 	var relation = new Array(
 		new Array("chrome", /chrome\/([\d\.]+)/gi),
 		new Array("firefox", /firefox\/([\d\.]+)/gi),
@@ -116,7 +118,7 @@ function FullBrowserSupport(doc, browser)
 function OnTdClick(e)
 {
 	var td = e.target;
-	var tbl = td.parentElement.parentElement.parentElement.parentElement;
+	var tbl = td.parentNode.parentNode.parentNode.parentNode;
 	var strName = tbl.getElementsByClassName("eateryname")[0].innerHTML;
 	var doc = document.getElementsByName("mainfra")[0].contentDocument;
 	var form1 = doc.getElementsByName("form1")[0];
@@ -124,11 +126,17 @@ function OnTdClick(e)
 	form1.food.value = td.innerHTML;
 }
 
+/*
+** add auto change account value
+** only for dazu
+*/
 function OnSubmit(e)
 {
-	var doc = document.getElementsByName("mainfra")[0].contentDocument;
-	var account = doc.getElementById("account");
-	account.value = Math.floor(Math.random()*100000);
+	if ("dazu" == GetArea()) {
+		var doc = document.getElementsByName("mainfra")[0].contentDocument;
+		var account = doc.getElementById("account");
+		account.value = Math.floor(Math.random()*100000);
+	}
 }
 
 /*
@@ -139,4 +147,40 @@ function OnSubmit(e)
 function GetArea()
 {
 	return location.href.match(/\w+(?=\/$)/gi);
+}
+
+function ShowAccountInputLine(doc)
+{
+	var p = doc.createElement("p");
+	var txt = doc.createTextNode("账号：");
+	var rtxname = doc.createElement("input");
+	var txtAttention = doc.createTextNode(
+		" （注意：软件园订餐需要提供RTX账号，请在这里填入"  
+	);
+	
+	var txtSpan = doc.createElement("span");
+	txtSpan.style["color"] = "orange";
+	var tmp = doc.createTextNode("姓名栏中对应的RTX账号）");
+	txtSpan.appendChild(tmp);
+	
+	rtxname.type = "text";
+	rtxname.id = "rtxname";
+	rtxname.style["font-size"] = "12px";
+	p.style["color"] = "green";
+	p.appendChild(txt);
+	p.appendChild(rtxname);
+	p.appendChild(txtAttention);
+	p.appendChild(txtSpan);
+	
+	//find a postion to add
+	var employee = doc.getElementById("employee");
+	var container = employee.parentNode.parentNode;
+	tmp = employee.parentNode.nextSibling;
+	container.insertBefore(p, tmp);
+	
+	//attach onchange handler
+	var account = doc.getElementById("account");
+	rtxname.onkeyup = function(e) {
+		account.value = rtxname.value;
+	}
 }
