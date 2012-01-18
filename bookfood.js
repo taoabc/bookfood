@@ -64,21 +64,32 @@ function GetBrowser()
 {
 	var browser = new Array();
 	var ua = navigator.userAgent.toLowerCase();
-	var s;
-	(s = ua.match(/firefox\/[\d.]+/g)) ? browser.firefox = s[0].substr(8) : null;
-	(s = ua.match(/msie\s[\d.]+/g)) ? browser.ie = s[0].substr(5) : null;
-	(s = ua.match(/chrome\/[\d.]+/g)) ? browser.chrome = s[0].substr(7) : null;
-
+	var relation = new Array(
+		new Array("chrome", /chrome\/([\d\.]+)/gi),
+		new Array("firefox", /firefox\/([\d\.]+)/gi),
+		new Array("ie", /msie\s([\d\.]+)/gi)
+	);
+	for (var i = 0; i < relation.length; ++i) {
+		var r = relation[i];
+		s = r[1].exec(ua);
+		if (null != s) {
+			browser["type"] = r[0];
+			browser["version"] = s[1];
+			break;
+		}
+	}
 	return browser;
 }
 
 function FullBrowserSupport(doc, browser)
 {
 	var bSupport = false;
-	if (null != browser.ie) {
+	switch(browser["type"]) {
+	case "ie":
 		alert("本人IE版本过高，不方便调试，故暂不支持IE。");
 		bSupport = false;
-	} else if (null != browser.firefox) {
+		break;
+	case "firefox":
 		var tds = doc.getElementsByTagName("td");
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
@@ -87,13 +98,17 @@ function FullBrowserSupport(doc, browser)
 			//td.addEventListener("click", OnTdClick, false);
 		}
 		bSupport = true;
-	} else if (null != browser.chrome) {
+		break;
+	case "chrome":
 		var tds = doc.getElementsByTagName("td");
 		for (var i = 0; i < tds.length; ++i) {
 			td = tds[i];
 			td.style.cursor = "pointer";
 		}
 		bSupport = true;
+		break;
+	default:
+		break;
 	}
 	return bSupport;
 }
