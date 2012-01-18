@@ -31,6 +31,10 @@ function validate()
 		return false;
 	}
 	var doc = e.contentDocument;
+	if (null == doc || undefined == doc) {
+		alert("请先点选  '我要订饭'");
+		return false;
+	}
 	var employee = doc.getElementById("employee");
 	if (null == employee || undefined == employee) {
 		alert("请先点选  ‘我要订饭’");
@@ -43,6 +47,11 @@ function alter(doc)
 {
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
+	var area = GetArea();
+	if ("xlfood" == area) {
+		alert("软件园的订餐正在紧张增加中");
+		return false;
+	}
 	account.value = Math.floor(Math.random()*100000);
 	employee.readOnly = false;
 	var btn = doc.getElementsByName("Submit")[0];
@@ -105,4 +114,14 @@ function OnSubmit(e)
 	var doc = document.getElementsByName("mainfra")[0].contentDocument;
 	var account = doc.getElementById("account");
 	account.value = Math.floor(Math.random()*100000);
+}
+
+/*
+** get area of company
+** return
+**   [string]
+*/
+function GetArea()
+{
+	return location.href.match(/\w+(?=\/$)/gi);
 }
