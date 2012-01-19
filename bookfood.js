@@ -48,12 +48,13 @@ function alter(doc)
 	var employee = doc.getElementById("employee");
 	var account = doc.getElementById("account");
 	var area = GetArea();
-	if ("xlfood" == area) {
+	/*if ("xlfood" == area) {
 		ShowAccountInputLine(doc);
 		return false;
 	} else if ("dazu" == area) {
 		account.value = Math.floor(Math.random()*100000);
-	}
+	}*/
+	account.value = Math.floor(Math.random()*100000);
 	employee.readOnly = false;
 	//add submit handler
 	var btn = doc.getElementsByName("Submit")[0];
@@ -132,11 +133,14 @@ function OnTdClick(e)
 */
 function OnSubmit(e)
 {
-	if ("dazu" == GetArea()) {
+	/*if ("dazu" == GetArea()) {
 		var doc = document.getElementsByName("mainfra")[0].contentDocument;
 		var account = doc.getElementById("account");
 		account.value = Math.floor(Math.random()*100000);
-	}
+	}*/
+	var doc = document.getElementsByName("mainfra")[0].contentDocument;
+	var account = doc.getElementById("account");
+	account.value = Math.floor(Math.random()*100000);
 }
 
 /*
