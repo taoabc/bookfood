@@ -1,8 +1,6 @@
 // JavaScript Document
 window.bookmeat = false;
 
-init();
-
 function init()
 {
 	if (!validate()) {
@@ -18,3 +16,5 @@ function validate()
 	}
 	return false;
 }
+
+init();
